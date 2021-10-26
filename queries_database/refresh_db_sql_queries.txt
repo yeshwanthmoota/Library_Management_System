@@ -1,0 +1,39 @@
+DROP DATABASE SE_project_database;
+SHOW DATABASES;
+CREATE DATABASE SE_project_database;
+SHOW DATABASES;
+USE SE_project_database;
+CREATE TABLE users(
+    user_id INT NOT NULL AUTO_INCREMENT,
+    user_name VARCHAR(30) NOT NULL,
+    user_email VARCHAR(60) UNIQUE,
+    user_password VARCHAR(60) NOT NULL,
+    PRIMARY KEY(user_id)
+);
+CREATE TABLE admins(
+    admin_id INT NOT NULL AUTO_INCREMENT,
+    admin_name VARCHAR(30) NOT NULL,
+    admin_email VARCHAR(60) UNIQUE,
+    admin_password VARCHAR(60) NOT NULL,
+    PRIMARY KEY(admin_id)
+);
+CREATE TABLE books(
+    book_id INT NOT NULL AUTO_INCREMENT,
+    book_name VARCHAR(100) NOT NULL,
+    book_author VARCHAR(50) NOT NULL,
+    book_searchstring VARCHAR(180) NOT NULL,
+    book_cost INT NOT NULL,
+    upload_timestamp VARCHAR(19),
+    upload_admin_id INT,
+    PRIMARY KEY(book_id),
+    FOREIGN KEY(upload_admin_id) REFERENCES admins(admin_id) ON DELETE SET NULL
+);
+CREATE TABLE my_reads(
+    user_id INT,
+    my_reads_list VARCHAR(180) DEFAULT "[]",
+    PRIMARY KEY(user_id),
+    FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+INSERT INTO admins(admin_name, admin_email, admin_password) VALUES("Yeshwanth Mootakoduru", "yeshwanthmunna2001@gmail.com", "a41acc7effe601de1dc2099a4e2fdd7c");
+INSERT INTO admins(admin_name, admin_email, admin_password) VALUES("Rohit Reddy", "rohit_red@gmail.com", "6d155e37fe757e34b90d29c2b5343b0a");

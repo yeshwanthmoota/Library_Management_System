@@ -1,0 +1,42 @@
+{% extends "base_template.html" %}
+{% block title %} My reads {% endblock %}
+
+{% block custom_nav_items %}
+    {% if login_status == True %}
+        <li class="nav-items">
+            <a class="nav-link" href="{{ url_for('my_account') }}">My account</a>
+        </li>
+    {% else %}
+        <li class="nav-items login-link">
+            <a class="nav-link" href="{{ url_for('login') }}" >Login</a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome, This is your 'My reads' page</h1>
+    <h3>You can find all the books you rented here</h3>
+    <h3>Go Nuts!</h3>
+    {% if not zero_length %}
+        {% for book in book_info_list %}
+            <br>
+                <div class="card" style="width:25%; padding:3%; background-color: rgb(255, 238, 0); border-radius: 25%;">
+                    <p class="card-title"><strong> Book name:</strong> {{ book[0][1] }}</p>
+                    <p class="card-title"><strong>Author name:</strong> {{ book[0][2] }}</p>
+                    <br>
+                    <form action="view_book" method="post">
+                        <input type="hidden" name="book_id" value="{{ book[0][0] }}">
+                        <button class="btn btn-primary" style="border-radius: 50px;" type="submit">View Book</button>
+                    </form>
+                    <br>
+                    <form action="remove_book_my_reads" method="post">
+                        <input type="hidden" name="book_id" value="{{ book[0][0] }}">
+                        <button class="btn btn-danger" style="border-radius: 50px;" type="submit">Remove from My Reads</button>
+                    </form>
+                </div>
+            <br>
+        {% endfor %}
+    {% else %}
+    <h3>Your 'My reads' is empty, go to omni library to insert some books.</h3>
+    {% endif %}
+{% endblock %}

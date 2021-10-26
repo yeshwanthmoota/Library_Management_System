@@ -1,0 +1,41 @@
+{% extends "base_template.html" %}
+{% block title %} My account {% endblock %}
+
+{% block custom_nav_items %}
+
+    {% if login_status == True %}
+        <li class="nav-items">
+            <a class="nav-link" href="{{ url_for('my_account') }}">My account</a>
+        </li>
+    {% else %}
+        <li class="nav-items login-link">
+            <a class="nav-link" href="{{ url_for('login') }}" >Login</a>
+        </li>
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+    <h1>Hello! {{ user_name }}, Welcome</h1>
+    <br>
+    {% if admin_user %}
+        Go to your <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-lg">Dashboard</a> page to add new books into the Database. 
+        <br>
+        <br>    
+    {% else %}
+        Go to your <a href="{{ url_for('my_reads') }}" class="btn btn-outline-primary btn-lg">My reads</a> page to read your books. 
+        <br>
+        <br>
+    {% endif %}
+    <form action="change_password" method="get">
+        <button class="btn btn-outline-dark" type="submit" >Change Password</button>
+    </form>
+    <br>
+    <form action="logout" method="get" >   <!-- this gets directed to the /logout page due to action="logout" --> 
+        <button class="btn btn-outline-success" type="submit" >Logout</button>    
+    </form>
+    <br>
+    <form action="delete_account" method="get" >
+        <button class="btn btn-outline-danger" type="submit" >Delete Account</button>
+    </form>
+{% endblock %}

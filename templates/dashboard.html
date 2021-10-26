@@ -1,0 +1,44 @@
+{% extends "base_template.html" %}
+
+{% block title %}Admin's Dashboard{% endblock %}
+
+{% block custom_nav_items %}
+
+    {% if login_status == True %}
+        <li class="nav-items">
+            <a class="nav-link" href="{{ url_for('my_account') }}">My account</a>
+        </li>
+    {% else %}
+        <li class="nav-items login-link">
+            <a class="nav-link" href="{{ url_for('login') }}" >Login</a>
+        </li>
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Hello! Upload new books to the database: </h1>
+
+<form action="dashboard" method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="fileToUpload" class="form-label">Select File to upload:(only pdf format allowed)</label>
+        <input type="file" class="form-control input-sm" name="file" id="fileToUpload" style="width: 25%;">
+    </div>
+    <div class="mb-3">
+        <label for="book_name" class="form-label">Enter the Name of the book:(the Name that should be used to search for this book)</label>
+        <input type="text" class="form-control input-sm" name="book_name" id="book_name" style="width: 25%;" placeholder="Don't mention the extension of the book">
+    <div class="mb-3">
+        <label for="book_author" class="form-label">Enter the Name of the author:</label>
+        <input type="text" class="form-control input-sm" name="book_author" id="book_author" style="width: 25%;">
+    </div>
+    <div class="mb-3">
+        <label for="book_searchstring" class="form-label">Enter the searchstring(different words seperated by ',') to help the search of the book:</label>
+        <input type="text" class="form-control input-sm" name="book_searchstring" id="book_searchstring" style="width: 50%;">
+    </div>
+    <div class="mb-3">
+        <label for="book_cost" class="form-label">Enter the cost of the book(₹ INR):</label>
+        <input type="number" class="form-control input-sm" name="book_cost" id="book_cost" style="width: 10%;" value="0">
+    </div>
+      <button type="submit" class="btn btn-outline-primary">Submit</button>
+</form>
+{% endblock %}

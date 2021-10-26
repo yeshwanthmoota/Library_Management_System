@@ -1,0 +1,28 @@
+{% extends "base_template.html" %}
+{% block title %} Login Page {% endblock %}
+
+{% block content %}
+
+  <div class="page-margin">
+    <h1>Login Page: </h1>
+    <br>
+    <form action="#" method="post">
+        <div class="mb-3">
+            <label for="EMAIL" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="EMAIL" aria-describedby="emailHelp" name="email" value = "{{ usr_email }}" style="width: 25%;">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+        <div class="mb-3">
+          <label for="PASSWORD" class="form-label">Password</label>
+          <input type="password" class="form-control" id="PASSWORD" name="password" style="width: 25%;">
+        </div>
+        <button type="submit" class="btn btn-outline-primary">Submit</button>
+        <div>
+            <br>
+            New here?   <a href="/register" class="link-primary" >Sign up!</a> Now
+            <br>
+            Are u a Admin? <a href="{{ url_for('admin_login') }}" class="link-primary">Login here</a> to enter the Admin's page
+        </div>
+      </form>
+  </div>
+{% endblock %}

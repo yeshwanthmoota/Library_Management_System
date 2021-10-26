@@ -1,0 +1,38 @@
+{% extends "base_template.html" %}
+{% block title %} Register Page {% endblock %}
+
+{% block content %}
+
+    <div class="page-margin">
+
+      <h1>Register Now! </h1>
+      <br>
+
+      <form action="#" method="post">
+          <div class="mb-3">
+            <label for="NAME" class="form-label">Name</label>
+            <input type="text" class="form-control" id="NAME" name="name" placeholder="Enter Your Name" style="width: 25%;" value = "{{ usr_name }}">
+          </div>
+          <div class="mb-3">
+            <label for="EMAIL" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="EMAIL" aria-describedby="emailHelp" name="email" placeholder="Enter Your Email" value = "{{ usr_email }}" style="width: 25%;">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <div class="mb-3">
+              <label for="PASSWORD" class="form-label">Password</label>
+              <input type="password" class="form-control" id="PASSWORD" name="password" style="width: 25%;">
+            </div>
+          <div class="mb-3">
+              <label for="CONFIRM_PASSWORD" class="form-label">Confirm Password</label>
+              <input type="password" class="form-control" id="CONFIRM_PASSWORD" name="password_confirmation" style="width: 25%;">
+          </div>
+          <button type="submit" class="btn btn-outline-primary">Register</button>
+          <div>
+              <br>
+              Already have an account? <a href="/login" class="link-primary" >Sign in</a>
+          </div>
+
+
+      </form>
+    </div>
+{% endblock %}

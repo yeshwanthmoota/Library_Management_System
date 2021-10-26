@@ -1,0 +1,32 @@
+{% extends "base_template.html" %}
+{% block title %} View Book {% endblock %}
+
+{% block custom_nav_items %}
+    {% if login_status == True %}
+        <li class="nav-items">
+            <a class="nav-link" href="{{ url_for('my_account') }}">My account</a>
+        </li>
+    {% else %}
+        <li class="nav-items login-link">
+            <a class="nav-link" href="{{ url_for('login') }}" >Login</a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h3>Happy Reading!(scroll down to have full view of the book)</h3>
+    <div class="wrapper" style="position: relative; overflow: hidden;">
+        <embed id="pdfframe" src="{{ url_for('static', filename=book_path) }}#toolbar=0&navpanes=0" width="100%" height="660" ></embed>
+        <div class="embed-cover" style="position: absolute;left: 0;right: 0;"></div>
+    </div>
+    <script type="text/javascript">
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        }, false);
+        function disableContextMenu() {
+            window.frames["pdfframe"].contentDocument.oncontextmenu = function(){return true;};   
+            var myFrame = document.getElementById('pdfframe');
+            myFrame.window.eval('document.addEventListener("contextmenu", function (e) {e.preventDefault();}, false)');
+        }
+    </script>
+{% endblock %}
