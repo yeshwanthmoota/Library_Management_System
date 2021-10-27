@@ -4,9 +4,7 @@ from flask_mysqldb import MySQL
 import yaml
 import hashlib
 import os
-import datetime
 import neccessary_functions as nf
-import smtplib
 
 
 app = Flask(__name__)
@@ -21,8 +19,6 @@ app.config["MYSQL_PASSWORD"] = db['mysql_password']
 app.config["MYSQL_DB"] = db['mysql_db']
 app.config["FILE_UPLOADS"] = db["file_uploads"]
 app.config["ALLOWED_FILE_EXTENSIONS"] = ["PDF"]
-app.config["GMAIL_ID"] = db["gmail_id"]
-app.config["GMAIL_PASSWORD"] = db["gmail_password"]
 
 mysql = MySQL(app)
 
@@ -36,7 +32,7 @@ def home():
     return render_template("home.html", login_status=login_status)
 
 @app.route("/login", methods=["GET", "POST"])
-def login():
+def login(): # '%Y-%m-%d %H:%M:%S'
     if request.method == "POST":
         session.permanent = True
         if request.form["email"] == "" or request.form["password"] == "":
@@ -60,54 +56,17 @@ def login():
                     f.write(my_reads_list+"\n")
                 my_reads_list = eval(my_reads_list)
                 i = 0
-                index_pop_list=[]
                 while i < len(my_reads_list):
                     found_book = cur.execute("SELECT * FROM books WHERE book_id={}".format(my_reads_list[i][0]))
                     if not found_book:
                         flash("One of your book is removed from My Reads because the admin deleted the book from the database", category="info")
-                        index_pop_list.append(i)
+                        my_reads_list.pop(i)
                     i+=1
-                for i in index_pop_list:
-                    my_reads_list.pop(i)
                 my_reads_list = str(my_reads_list)
                 cur.execute(''' UPDATE my_reads SET my_reads_list="{}" WHERE user_id={} '''.format(my_reads_list, session["user's id"]))
                 mysql.connection.commit()
-                #################################################################### Expiry Remainder
-                my_reads_list = eval(my_reads_list)
-                print(my_reads_list)
-                i=0
-                index_pop_list=[]
-                while i<len(my_reads_list):
-                    date_time_string = my_reads_list[i][1]
-                    print(date_time_string)
-                    inital_datetime = datetime.datetime.strptime(date_time_string, "%Y-%m-%d %H:%M:%S")
-                    remainder_datetime = inital_datetime + datetime.timedelta(minutes=1.5)
-                    expiry_datetime = inital_datetime + datetime.timedelta(minutes=3)
-                    current_datetime = datetime.datetime.now()
-                    if (current_datetime > remainder_datetime) and (current_datetime < expiry_datetime):
-                        gmail_id = app.config["GMAIL_ID"] 
-                        gmail_password = app.config["GMAIL_PASSWORD"]
-                        subject = "Your book is about to expire"
-                        body="""Your book is about to expire finish reading it or return it if you don't need it.
-                                please go your my_reads page to check it out http://127.0.0.1:5000/my_reads"""
-                        listofaddress = ["{}".format(session["user's email"])]
-                        nf.send_mail(gmail_id=gmail_id, gmail_password=gmail_password, subject=subject, body=body, listofaddress=listofaddress)
-                    if current_datetime > expiry_datetime:
-                        gmail_id = app.config["GMAIL_ID"] 
-                        gmail_password = app.config["GMAIL_PASSWORD"]
-                        subject = "Your book got expired"
-                        body="""Your book got expired.
-                                please go your my_reads page to check it out http://127.0.0.1:5000/my_reads"""
-                        listofaddress = ["{}".format(session["user's email"])]
-                        nf.send_mail(gmail_id=gmail_id, gmail_password=gmail_password, subject=subject, body=body, listofaddress=listofaddress)
-                        flash("One of your books got expired", category="info")
-                        index_pop_list.append(i)
-                    i+=1
-                for i in index_pop_list:
-                    my_reads_list.pop(i)
-                my_reads_list = str(my_reads_list)
-                cur.execute(''' UPDATE my_reads SET my_reads_list="{}" WHERE user_id={} '''.format(my_reads_list, session["user's id"]))
-                mysql.connection.commit()
+                with open("testing.txt", "w") as f:
+                    f.write(str(my_reads_list))
                 cur.close()
                 return redirect(url_for("my_account"))
             else: # User not found
