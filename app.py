@@ -6,7 +6,6 @@ import hashlib
 import os
 import datetime
 import neccessary_functions as nf
-import smtplib
 
 
 app = Flask(__name__)
