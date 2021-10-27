@@ -64,10 +64,11 @@ def login():
                     found_book = cur.execute("SELECT * FROM books WHERE book_id={}".format(my_reads_list[i][0]))
                     if not found_book:
                         flash("One of your book is removed from My Reads because the admin deleted the book from the database", category="info")
-                        index_pop_list.append(i)
+                        # index_pop_list.append(i)
+                        my_reads_list.pop(i)
                     i+=1
-                for i in index_pop_list:
-                    my_reads_list.pop(i)
+                # for i in index_pop_list:
+                #     my_reads_list.pop(i)
                 my_reads_list = str(my_reads_list)
                 cur.execute(''' UPDATE my_reads SET my_reads_list="{}" WHERE user_id={} '''.format(my_reads_list, session["user's id"]))
                 mysql.connection.commit()
@@ -80,8 +81,8 @@ def login():
                     date_time_string = my_reads_list[i][1]
                     print(date_time_string)
                     inital_datetime = datetime.datetime.strptime(date_time_string, "%Y-%m-%d %H:%M:%S")
-                    remainder_datetime = inital_datetime + datetime.timedelta(minutes=1.5)
-                    expiry_datetime = inital_datetime + datetime.timedelta(minutes=3)
+                    remainder_datetime = inital_datetime + datetime.timedelta(days=3)
+                    expiry_datetime = inital_datetime + datetime.timedelta(days=5)
                     current_datetime = datetime.datetime.now()
                     if (current_datetime > remainder_datetime) and (current_datetime < expiry_datetime):
                         gmail_id = app.config["GMAIL_ID"] 
@@ -100,10 +101,13 @@ def login():
                         listofaddress = ["{}".format(session["user's email"])]
                         nf.send_mail(gmail_id=gmail_id, gmail_password=gmail_password, subject=subject, body=body, listofaddress=listofaddress)
                         flash("One of your books got expired", category="info")
-                        index_pop_list.append(i)
+                        # index_pop_list.append(i)
+                        my_reads_list.pop(i)
                     i+=1
-                for i in index_pop_list:
-                    my_reads_list.pop(i)
+                # for i in index_pop_list:
+                #     print(i)
+                #     print(my_reads_list)
+                #     my_reads_list.pop(i)
                 my_reads_list = str(my_reads_list)
                 cur.execute(''' UPDATE my_reads SET my_reads_list="{}" WHERE user_id={} '''.format(my_reads_list, session["user's id"]))
                 mysql.connection.commit()
