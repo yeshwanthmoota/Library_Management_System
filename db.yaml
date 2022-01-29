@@ -1,6 +1,6 @@
 mysql_host: "localhost"
 mysql_user: "yeshwanth_moota"
-mysql_password: "12345"
+mysql_password: "Abcde@12345"
 mysql_db: "SE_project_database"
 file_uploads: "/home/yeshwanth_moota/Documents/Code/Python/SE_project_5th_sem/static/file_upload_folder"
 gmail_id: "libraryomni@gmail.com"
